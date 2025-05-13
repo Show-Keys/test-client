@@ -1,0 +1,97 @@
+.navbar-wrapper {
+  position: relative;
+  width: 100%;
+  z-index: 1000;
+}
+
+.custom-navbar {
+  background: linear-gradient(to right, #1a1a1a, #2c2c2c) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 1rem;
+  width: 100%;
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff !important;
+  transition: color 0.3s ease;
+}
+
+.brand-text:hover {
+  color: #ffc107 !important;
+}
+
+.nav-link-custom {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.2rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-link-custom:hover {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.nav-link-custom.active {
+  color: #ffc107 !important;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.logout-btn {
+  color: #dc3545 !important;
+}
+
+.logout-btn:hover {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  color: #dc3545 !important;
+}
+
+.admin-btn {
+  background-color: #ffc107 !important;
+  border: none !important;
+  color: #000 !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+}
+
+.admin-btn:hover {
+  background-color: #ffca2c !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.custom-toggler {
+  border: none !important;
+  padding: 0.4rem 0.6rem;
+}
+
+.custom-toggler:focus {
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  .nav-link-custom {
+    margin: 0.2rem 0;
+  }
+  
+  .admin-btn {
+    margin: 0.5rem 0;
+  }
+
+  .navbar-collapse {
+    text-align: right;
+    background-color: #1a1a1a;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 0.5rem;
+  }
+} 

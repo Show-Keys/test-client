@@ -1,0 +1,99 @@
+/* General styles */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Hero Section */
+  .hero {
+    text-align: center;
+    padding: 3rem 0;
+  }
+  
+  .search-bar {
+    display: flex;
+    max-width: 600px;
+    margin: 1.5rem auto;
+  }
+  
+  .search-bar input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 1rem;
+  }
+  
+  .search-bar button {
+    padding: 0 1.5rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+  }
+  
+  /* Auctions */
+  .auctions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+  
+  .auction-card {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.3s;
+    cursor: pointer;
+  }
+  
+  .auction-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .auction-img {
+    height: 200px;
+    background-color: #eee;
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .auction-info {
+    padding: 1.25rem;
+  }
+  
+  .auction-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .auction-price {
+    color: #2563eb;
+    font-weight: bold;
+    margin: 0.75rem 0;
+    font-size: 1.2rem;
+  }
+  
+  .auction-time {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .search-bar {
+      flex-direction: column;
+    }
+  
+    .search-bar input, .search-bar button {
+      border-radius: 4px;
+      width: 100%;
+      margin: 0.25rem 0;
+    }
+  }
+  
