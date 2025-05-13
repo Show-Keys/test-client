@@ -5,7 +5,7 @@ export const registerUser = createAsyncThunk(
     "users/registerUser",
     async (udata, { rejectWithValue }) => {
       try {
-        const res = await axios.post("http://localhost:3002/registerUser", {
+        const res = await axios.post("https://test-server-j0t3.onrender.com/registerUser", {
           fullName: udata.fullName,
           nationalId: udata.nationalId,
           email: udata.email,
@@ -36,7 +36,7 @@ export const registerUser = createAsyncThunk(
     "users/loginUser",
     async (credentials) => {
       try {
-        const res = await axios.post("http://127.0.0.1:3002/loginUser", credentials);
+        const res = await axios.post("https://test-server-j0t3.onrender.com/loginUser", credentials);
         // Store user data in localStorage
         localStorage.setItem('user', JSON.stringify(res.data.user));
         return res.data;
@@ -49,12 +49,12 @@ export const registerUser = createAsyncThunk(
 
   // Add fetch and delete thunks
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const res = await axios.get("http://127.0.0.1:3002/users");
+  const res = await axios.get("https://test-server-j0t3.onrender.com/users");
   return res.data;
 });
 
 export const deleteUserById = createAsyncThunk("users/deleteUser", async (id) => {
-  await axios.delete(`http://127.0.0.1:3002/users/${id}`);
+  await axios.delete(`https://test-server-j0t3.onrender.com/users/${id}`);
   return id;
 });
 

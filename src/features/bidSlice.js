@@ -6,7 +6,7 @@ export const placeBid = createAsyncThunk(
   'bids/placeBid',
   async (bidData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post('http://127.0.0.1:3002/addBid', bidData);
+      const { data } = await axios.post('https://test-server-j0t3.onrender.com/addBid', bidData);
       return data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
