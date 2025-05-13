@@ -6,7 +6,7 @@ export const placeBid = createAsyncThunk(
   'bids/placeBid',
   async (bidData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post('http://127.0.0.1:3002/addBid', bidData);
+      const { data } = await axios.post('https://test-server-j0t3.onrender.com/addBid', bidData);
       return data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
@@ -19,7 +19,7 @@ export const getBids = createAsyncThunk(
   'bids/getBids',
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:3002/getBids/${productId}`);
+      const response = await axios.get(`https://test-server-j0t3.onrender.com/getBids/${productId}`);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || err.message);
