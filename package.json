@@ -10,15 +10,19 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.9.0",
+    "axios-mock-adapter": "^2.1.0",
     "bootstrap": "^5.3.6",
     "formik": "^2.4.6",
+    "jest-dom": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.56.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.0",
     "react-scripts": "5.0.1",
+    "react-test-renderer": "^19.1.0",
     "reactstrap": "^9.2.3",
+    "redux-mock-store": "^1.5.5",
     "web-vitals": "^2.1.4",
     "yup": "^1.6.1"
   },
@@ -32,6 +36,11 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios|react-router-dom|redux-mock-store)/)"
     ]
   },
   "browserslist": {
