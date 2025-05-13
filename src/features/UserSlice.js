@@ -140,5 +140,3 @@ export const userSlice = createSlice({
 
 export default userSlice.reducer;
 export const { resetUserState, logout } = userSlice.actions;
-
-//good jobe 
