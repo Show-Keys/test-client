@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import Swal from "sweetalert2";
 //import './EditUser.css'; // Create your own styling as needed
 
 const EditUser = () => {
@@ -22,7 +23,7 @@ const EditUser = () => {
         setLoading(false);
       })
       .catch(() => {
-        alert('Failed to fetch user');
+        Swal.fire("Error", "Failed to fetch user", "error");
         navigate('/ManageUsers');
       });
   }, [id, navigate]);
@@ -36,10 +37,10 @@ const EditUser = () => {
     e.preventDefault();
     try {
       await axios.put(`https://test-server-j0t3.onrender.com/users/${id}`, user);
-      alert('User updated successfully');
+      await Swal.fire("Success", "User updated successfully", "success");
       navigate('/ManageUsers');
     } catch (err) {
-      alert('Update failed');
+      Swal.fire("Error", "Update failed", "error");
     }
   };
 

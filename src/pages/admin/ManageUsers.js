@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from "sweetalert2";
 import './ManageUsers.css';
 
 const ManageUsers = () => {
@@ -16,7 +17,7 @@ const ManageUsers = () => {
       const res = await axios.get('https://test-server-j0t3.onrender.com/users');
       setUsers(res.data);
     } catch (err) {
-      setError('Failed to fetch users. Please try again later.');
+      Swal.fire("Error", "Failed to fetch users. Please try again later.", "error");
       console.error('Error fetching users:', err);
     } finally {
       setLoading(false);
@@ -24,12 +25,21 @@ const ManageUsers = () => {
   };
 
   const deleteUser = async (id) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you really want to delete this user?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    });
+    if (result.isConfirmed) {
       try {
         await axios.delete(`https://test-server-j0t3.onrender.com/users/${id}`);
         setUsers(prev => prev.filter(user => user._id !== id));
+        Swal.fire("Deleted!", "User has been deleted.", "success");
       } catch (err) {
-        setError('Failed to delete user. Please try again.');
+        Swal.fire("Error", "Failed to delete user. Please try again.", "error");
         console.error('Error deleting user:', err);
       }
     }

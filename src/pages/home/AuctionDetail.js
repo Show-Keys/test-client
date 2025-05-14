@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetails } from '../../features/ProductSlice';
 import { getBids, placeBid, resetBidState } from '../../features/bidSlice';
+import Swal from "sweetalert2";
 import './AuctionDetail.css';
 
 const AuctionDetail = () => {
@@ -76,13 +77,13 @@ const AuctionDetail = () => {
 
   const handleBid = () => {
     if (isAuctionEnded) {
-      return alert('This auction has ended. Bidding is no longer allowed.');
+      return Swal.fire("Auction Ended", "This auction has ended. Bidding is no longer allowed.", "info");
     }
 
     const amount = parseFloat(bidAmount);
-    if (!user) return alert('Please login to place a bid.');
+    if (!user) return Swal.fire("Login Required", "Please login to place a bid.", "warning");
     if (!amount || amount < minBidAmount) {
-      return alert(`Your bid must be at least $${minBidAmount}`);
+      return Swal.fire("Invalid Bid", `Your bid must be at least $${minBidAmount}`, "error");
     }
 
     dispatch(placeBid({

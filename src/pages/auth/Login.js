@@ -3,6 +3,7 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, resetUserState } from "../../features/UserSlice";
 import { useNavigate, Link } from "react-router-dom";
+import Swal from "sweetalert2"; // <-- Add this import
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const Login = () => {
     const { email, password } = formData;
 
     if (!email || !password) {
-      alert("Please fill in all fields");
+      Swal.fire("Error", "Please fill in all fields", "error"); // <-- Use SweetAlert
       return;
     }
 
@@ -48,7 +49,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      Swal.fire("Login failed", error.message || "Invalid credentials", "error"); // <-- Use SweetAlert
     }
   };
 
@@ -67,7 +68,6 @@ const Login = () => {
 
   return (
     <div>
-
       {/* Login Form */}
       <main className="container">
         <div className="auth-container">
