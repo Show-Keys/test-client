@@ -120,6 +120,49 @@ const AuctionDetail = () => {
         <button onClick={() => window.history.back()} style={{ marginBottom: '1.5rem' }}>← Back</button>
 
         <div className="auction-detail">
+          {/* Admin Edit/Delete Buttons at the top */}
+          {user && user.role === "admin" && (
+            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', justifyContent: 'flex-end' }}>
+              <Button
+                color="primary"
+                size="md"
+                tag={Link}
+                to={`/editAuction/${product._id}`}
+                style={{ minWidth: 110, fontWeight: 600 }}
+              >
+                <i className="fas fa-edit me-2"></i> Edit Auction
+              </Button>
+              <Button
+                color="danger"
+                size="md"
+                style={{ minWidth: 110, fontWeight: 600 }}
+                onClick={() => {
+                  Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'This will permanently delete the auction.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                  }).then(async (result) => {
+                    if (result.isConfirmed) {
+                      try {
+                        await axios.delete(`https://test-server-j0t3.onrender.com/products/${product._id}`);
+                        Swal.fire('Deleted!', 'Auction has been deleted.', 'success').then(() => {
+                          navigate('/AdminDashboard');
+                        });
+                      } catch (err) {
+                        Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
+                      }
+                    }
+                  });
+                }}
+              >
+                <i className="fas fa-trash me-2"></i> Delete Auction
+              </Button>
+            </div>
+          )}
+
           <div>
             <div 
               className="main-image" 
@@ -228,47 +271,6 @@ const AuctionDetail = () => {
                 <p>No bids yet</p>
               )}
             </div>
-
-            {/* Only show Edit and Delete buttons if user is admin */}
-            {user && user.role === "admin" && (
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                <Button
-                  color="info"
-                  size="sm"
-                  tag={Link}
-                  to={`/editAuction/${product._id}`}
-                >
-                  <i className="fas fa-edit"></i> Edit
-                </Button>
-                <Button
-                  color="danger"
-                  size="sm"
-                  onClick={() => {
-                    Swal.fire({
-                      title: 'Are you sure?',
-                      text: 'This will permanently delete the auction.',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Yes, delete it!',
-                      cancelButtonText: 'Cancel',
-                    }).then(async (result) => {
-                      if (result.isConfirmed) {
-                        try {
-                          await axios.delete(`https://test-server-j0t3.onrender.com/products/${product._id}`);
-                          Swal.fire('Deleted!', 'Auction has been deleted.', 'success').then(() => {
-                            navigate('/AdminDashboard');
-                          });
-                        } catch (err) {
-                          Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
-                        }
-                      }
-                    });
-                  }}
-                >
-                  <i className="fas fa-trash"></i> Delete
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </main>
