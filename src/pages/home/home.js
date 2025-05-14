@@ -67,7 +67,11 @@ const Home = () => {
         <div className="auctions-grid">
           {filteredProducts.map((product) => (
             <div className="auction-card" key={product._id}>
-              <Link to={`/AuctionDetail/${product._id}`} className="auction-link">
+              <Link
+                to={`/AuctionDetail/${product._id}`}
+                className="auction-link"
+                style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}
+              >
                 <div
                   className="auction-img"
                   style={{ backgroundImage: `url(${product.imageUrl})` }}
