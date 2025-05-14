@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../features/ProductSlice';
 import './Home.css';
-import { Link, useNavigate } from 'react-router-dom'; // Add useNavigate
-import Swal from "sweetalert2"; // Import SweetAlert2
+import { Link, useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -38,6 +38,25 @@ const Home = () => {
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Handle card click with SweetAlert
+  const handleCardClick = (productId) => {
+    Swal.fire({
+      title: "Guest Mode",
+      text: "You can view the bids, but you must login to place a bid.",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "Login",
+      cancelButtonText: "Continue",
+      allowOutsideClick: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate('/login');
+      } else {
+        navigate(`/AuctionDetail/${productId}`);
+      }
+    });
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -66,24 +85,23 @@ const Home = () => {
 
         <div className="auctions-grid">
           {filteredProducts.map((product) => (
-            <div className="auction-card" key={product._id}>
-              <Link
-                to={`/AuctionDetail/${product._id}`}
-                className="auction-link"
-                style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}
-              >
-                <div
-                  className="auction-img"
-                  style={{ backgroundImage: `url(${product.imageUrl})` }}
-                ></div>
-                <div className="auction-info">
-                  <h3 className="auction-title">{product.name}</h3>
-                  <div className="auction-price">${product.startingPrice}</div>
-                  <div className="auction-time">
-                    Ends: {new Date(product.endTime).toLocaleString()}
-                  </div>
+            <div
+              className="auction-card"
+              key={product._id}
+              style={{ cursor: 'pointer' }}
+              onClick={() => handleCardClick(product._id)}
+            >
+              <div
+                className="auction-img"
+                style={{ backgroundImage: `url(${product.imageUrl})` }}
+              ></div>
+              <div className="auction-info">
+                <h3 className="auction-title">{product.name}</h3>
+                <div className="auction-price">${product.startingPrice}</div>
+                <div className="auction-time">
+                  Ends: {new Date(product.endTime).toLocaleString()}
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>
