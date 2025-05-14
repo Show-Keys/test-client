@@ -23,9 +23,9 @@ const AdminDashboard = () => {
 
   // Format currency
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-OM', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'OMR'
     }).format(amount);
   };
 

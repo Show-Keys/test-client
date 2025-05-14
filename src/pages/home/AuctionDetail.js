@@ -88,7 +88,7 @@ const AuctionDetail = () => {
     const amount = parseFloat(bidAmount);
     if (!user) return Swal.fire("Login Required", "Please login to place a bid.", "warning");
     if (!amount || amount < minBidAmount) {
-      return Swal.fire("Invalid Bid", `Your bid must be at least $${minBidAmount}`, "error");
+      return Swal.fire("Invalid Bid", `Your bid must be at least ﷼${minBidAmount}`, "error");
     }
 
     dispatch(placeBid({
@@ -202,12 +202,12 @@ const AuctionDetail = () => {
               <div className="current-price">
                 <span>Current Highest Bid:</span>
                 <span className="price">
-                  ${sortedBids.length > 0 ? sortedBids[0].bidAmount : product.startingPrice}
+                  {sortedBids.length > 0 ? sortedBids[0].bidAmount : product.startingPrice} ﷼
                 </span>
               </div>
               <div className="starting-price">
                 <span>Starting Price:</span>
-                <span className="price">${product.startingPrice}</span>
+                <span className="price">{product.startingPrice} ﷼</span>
               </div>
             </div>
 
@@ -260,7 +260,7 @@ const AuctionDetail = () => {
                   {sortedBids.map((bid, index) => (
                     <div key={index} className="bid-item">
                       <span className="bidder">{bid.bidderName}</span>
-                      <span className="bid-amount">${bid.bidAmount}</span>
+                      <span className="bid-amount">{bid.bidAmount} ﷼</span>
                       <span className="bid-time">
                         {new Date(bid.bidTime).toLocaleString()}
                       </span>

@@ -105,7 +105,7 @@ const Home = () => {
               ></div>
               <div className="auction-info">
                 <h3 className="auction-title">{product.name}</h3>
-                <div className="auction-price">${product.startingPrice}</div>
+                <div className="auction-price">{product.startingPrice} ﷼</div>
                 <div className="auction-time">
                   Ends: {new Date(product.endTime).toLocaleString()}
                 </div>
