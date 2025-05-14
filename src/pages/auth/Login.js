@@ -43,6 +43,18 @@ const Login = () => {
         }
         // Navigate based on role
         if (result.user.role === "admin") {
+          // SweetAlert for admin activation
+          await Swal.fire({
+            title: "Admin Activated!",
+            text: "Welcome, admin. You have full access.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1800,
+            timerProgressBar: true,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
           navigate("/AdminDashboard");
         } else {
           navigate("/home");
