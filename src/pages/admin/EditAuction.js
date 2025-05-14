@@ -54,11 +54,27 @@ const EditAuction = () => {
 
     Promise.all([fetchAuction, fetchBids])
       .then(([auctionRes, bidsRes]) => {
-        setFormData(auctionRes.data);
+        // Defensive: handle error from backend
+        if (auctionRes.data && auctionRes.data.success === false) {
+          setError(auctionRes.data.message || 'Failed to fetch auction details.');
+          setLoading(false);
+          return;
+        }
+        // Ensure all fields are strings for controlled inputs
+        const product = auctionRes.data;
+        setFormData({
+          name: product.name || '',
+          description: product.description || '',
+          startingPrice: product.startingPrice !== undefined ? String(product.startingPrice) : '',
+          endTime: product.endTime ? product.endTime.slice(0, 16) : '', // for datetime-local
+          imageUrl: product.imageUrl || '',
+          latitude: product.latitude !== undefined ? String(product.latitude) : '',
+          longitude: product.longitude !== undefined ? String(product.longitude) : '',
+        });
         setHasBids(Array.isArray(bidsRes.data) && bidsRes.data.length > 0);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         setError('Failed to fetch auction details.');
         setLoading(false);
       });
