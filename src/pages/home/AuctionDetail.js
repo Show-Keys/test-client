@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getProductDetails } from '../../features/ProductSlice';
 import { getBids, placeBid, resetBidState } from '../../features/bidSlice';
 import Swal from "sweetalert2";
+import { Button } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import './AuctionDetail.css';
 
 const AuctionDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { product } = useSelector((state) => state.products);
   const { bidList, isLoading: bidLoading, isError: bidError, message: bidMessage, isSuccess: bidSuccess } = useSelector((state) => state.bids);
@@ -223,6 +227,19 @@ const AuctionDetail = () => {
                 <p>No bids yet</p>
               )}
             </div>
+
+            {/* Only show Edit button if user is admin */}
+            {user && user.role === "admin" && (
+              <Button
+                color="info"
+                size="sm"
+                tag={Link}
+                to={`/editAuction/${product._id}`}
+                style={{ marginTop: '1rem' }}
+              >
+                <i className="fas fa-edit"></i> Edit
+              </Button>
+            )}
           </div>
         </div>
       </main>
