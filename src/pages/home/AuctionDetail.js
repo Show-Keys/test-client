@@ -235,7 +235,7 @@ const AuctionDetail = () => {
                     type="number"
                     value={bidAmount}
                     onChange={(e) => setBidAmount(e.target.value)}
-                    placeholder={`Minimum bid: $${minBidAmount}`}
+                    placeholder={`Minimum bid: ﷼${minBidAmount}`}
                     min={minBidAmount}
                     step="0.01"
                   />

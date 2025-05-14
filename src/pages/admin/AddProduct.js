@@ -203,7 +203,7 @@ const AddProduct = () => {
                     <Row>
                       <Col md={6}>
                         <FormGroup className="mb-4">
-                          <Label for="startingPrice">Starting Price ($)</Label>
+                          <Label for="startingPrice">Starting Price (﷼)</Label>
                           <Input
                             type="number"
                             name="startingPrice"
