@@ -10,7 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { productList, isLoading, isError, message } = useSelector((state) => state.products);
   const user = JSON.parse(localStorage.getItem('user')); // Get user from localStorage
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'Admin';
 
   const [searchTerm, setSearchTerm] = useState('');
 

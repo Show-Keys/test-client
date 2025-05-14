@@ -40,7 +40,7 @@ const Login = () => {
         if (formData.remember) {
           localStorage.setItem('user', JSON.stringify(result.user));
         }
-        if (result.user.role === "admin") {
+        if (result.user.role === "Admin") {
           await Swal.fire({
             title: '<span style="color:#ff5722; font-weight:bold;">🔥 Admin Activated! 🔥</span>',
             html: '<div style="font-size:1.2em;">Welcome, <b>admin</b>. You have <span style="color:#ff9800;">full access</span>.<br><br><span style="font-size:2em;">🚀</span></div>',
@@ -84,7 +84,7 @@ const Login = () => {
       const userData = JSON.parse(storedUser);
       // Only auto-navigate if not already on the dashboard/home
       if (window.location.pathname === "/login") {
-        if (userData.role === "admin") {
+        if (userData.role === "Admin") {
           navigate("/AdminDashboard");
         } else {
           navigate("/home");

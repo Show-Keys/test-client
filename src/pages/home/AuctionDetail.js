@@ -121,7 +121,7 @@ const AuctionDetail = () => {
 
         <div className="auction-detail">
           {/* Admin Edit/Delete Buttons at the top */}
-          {user && user.role === "admin" && (
+          {user && user.role === "Admin" && (
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', justifyContent: 'flex-end' }}>
               <Button
                 color="primary"

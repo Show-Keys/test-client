@@ -22,7 +22,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = user?.role === 'Admin';
 
   const toggle = () => setIsOpen(!isOpen);
 
