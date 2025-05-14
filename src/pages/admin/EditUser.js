@@ -37,7 +37,13 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`https://test-server-j0t3.onrender.com/users/${id}`, user);
+      const response = await axios.put(`https://test-server-j0t3.onrender.com/users/${id}`, user);
+      // If the edited user is the logged-in user, update localStorage and Redux
+      const loggedInUser = JSON.parse(localStorage.getItem('user'));
+      if (loggedInUser && loggedInUser._id === response.data._id) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        // Optionally: dispatch({ type: 'users/loginUser/fulfilled', payload: { user: response.data, message: "Profile updated" } });
+      }
       Swal.fire('Success!', 'User updated successfully!', 'success').then(() => {
         navigate('/ManageUsers');
       });
