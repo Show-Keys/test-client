@@ -168,9 +168,9 @@ const AdminDashboard = () => {
                     <td>${product.startingPrice}</td>
                     <td>{new Date(product.endTime).toLocaleString()}</td>
                     <td>
-                      {isAdmin && (
+                      {isAdmin ? (
                         <>
-                          <Link to={`/edit-auction/${product._id}`} className="btn btn-primary btn-sm me-2">
+                          <Link to={`/editAuction/${product._id}`} className="btn btn-primary btn-sm me-2">
                             <i className="fas fa-edit"></i> Edit
                           </Link>
                           <button
@@ -180,7 +180,7 @@ const AdminDashboard = () => {
                             <i className="fas fa-trash"></i> Delete
                           </button>
                         </>
-                      )}
+                      ) : null}
                     </td>
                   </tr>
                 )) : (
