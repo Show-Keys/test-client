@@ -21,6 +21,7 @@ const EditAuction = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [geoLoading, setGeoLoading] = useState(false);
 
   // Fetch auction details
   useEffect(() => {
@@ -50,6 +51,29 @@ const EditAuction = () => {
     } catch (err) {
       Swal.fire('Error!', 'Failed to update auction. Please try again.', 'error');
     }
+  };
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      Swal.fire('Error', 'Geolocation is not supported by your browser.', 'error');
+      return;
+    }
+    setGeoLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setFormData((prev) => ({
+          ...prev,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        }));
+        setGeoLoading(false);
+        Swal.fire('Success', 'Location fetched!', 'success');
+      },
+      (error) => {
+        setGeoLoading(false);
+        Swal.fire('Error', 'Unable to retrieve your location.', 'error');
+      }
+    );
   };
 
   return (
@@ -155,6 +179,15 @@ const EditAuction = () => {
                           onChange={handleChange}
                         />
                       </FormGroup>
+                      <Button
+                        type="button"
+                        color="info"
+                        className="mb-3"
+                        onClick={handleGetLocation}
+                        disabled={geoLoading}
+                      >
+                        {geoLoading ? 'Getting Location...' : 'Use My Current Location'}
+                      </Button>
                       <div className="d-flex gap-3">
                         <Button color="primary" type="submit" className="px-4">
                           <i className="fas fa-save me-2"></i>
