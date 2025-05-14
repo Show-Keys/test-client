@@ -45,12 +45,17 @@ const EditAuction = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [geoLoading, setGeoLoading] = useState(false);
+  const [hasBids, setHasBids] = useState(false); // <-- Track if there are bids
 
-  // Fetch auction details
+  // Fetch auction details and bids
   useEffect(() => {
-    axios.get(`https://test-server-j0t3.onrender.com/products/${id}`)
-      .then(res => {
-        setFormData(res.data);
+    const fetchAuction = axios.get(`https://test-server-j0t3.onrender.com/products/${id}`);
+    const fetchBids = axios.get(`https://test-server-j0t3.onrender.com/bids?productId=${id}`);
+
+    Promise.all([fetchAuction, fetchBids])
+      .then(([auctionRes, bidsRes]) => {
+        setFormData(auctionRes.data);
+        setHasBids(Array.isArray(bidsRes.data) && bidsRes.data.length > 0);
         setLoading(false);
       })
       .catch(() => {
@@ -152,7 +157,13 @@ const EditAuction = () => {
                           value={formData.startingPrice}
                           onChange={handleChange}
                           required
+                          disabled={hasBids} // <-- Disable if there are bids
                         />
+                        {hasBids && (
+                          <div style={{ color: '#dc3545', fontSize: '0.95em', marginTop: '0.25rem' }}>
+                            Cannot edit starting price: there are active bids.
+                          </div>
+                        )}
                       </FormGroup>
                       <FormGroup className="mb-4">
                         <Label for="endTime">End Time</Label>
