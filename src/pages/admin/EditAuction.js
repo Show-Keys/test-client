@@ -6,6 +6,29 @@ import {
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './AddProduct.css'; // Reuse AddProduct styles
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+
+// Custom marker icon fix for React-Leaflet
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
+
+function LocationPicker({ setFormData }) {
+  useMapEvents({
+    click(e) {
+      setFormData(prev => ({
+        ...prev,
+        latitude: e.latlng.lat,
+        longitude: e.latlng.lng,
+      }));
+    },
+  });
+  return null;
+}
 
 const EditAuction = () => {
   const { id } = useParams();
@@ -188,6 +211,19 @@ const EditAuction = () => {
                       >
                         {geoLoading ? 'Getting Location...' : 'Use My Current Location'}
                       </Button>
+                      <MapContainer
+                        center={[formData.latitude || 0, formData.longitude || 0]}
+                        zoom={formData.latitude && formData.longitude ? 13 : 2}
+                        style={{ height: '300px', width: '100%', marginBottom: '1rem' }}
+                      >
+                        <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        {formData.latitude && formData.longitude && (
+                          <Marker position={[formData.latitude, formData.longitude]} />
+                        )}
+                        <LocationPicker setFormData={setFormData} />
+                      </MapContainer>
                       <div className="d-flex gap-3">
                         <Button color="primary" type="submit" className="px-4">
                           <i className="fas fa-save me-2"></i>
