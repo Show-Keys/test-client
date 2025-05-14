@@ -117,13 +117,29 @@ const NavigationBar = () => {
                       </Button>
                     </NavItem>
                   )}
-                  <NavItem>
+                  <NavItem className="d-flex align-items-center">
                     <NavLink 
                       onClick={handleLogout}
                       className="nav-link-custom logout-btn"
+                      style={{ display: 'flex', alignItems: 'center' }}
                     >
                       <i className="fas fa-sign-out-alt me-1"></i>
                       Logout
+                      {user && (
+                        <img
+                          src={user.profilepic || defaultAvatar}
+                          alt="Profile"
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            marginLeft: 12,
+                            border: '2px solid #ffc107',
+                            background: '#fff'
+                          }}
+                        />
+                      )}
                     </NavLink>
                   </NavItem>
                 </>
