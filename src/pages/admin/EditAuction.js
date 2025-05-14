@@ -49,24 +49,33 @@ const EditAuction = () => {
 
   // Fetch auction details and bids
   useEffect(() => {
+    setLoading(true);
+    if (!id) {
+      setError('No auction ID provided in the URL.');
+      setLoading(false);
+      return;
+    }
     const fetchAuction = axios.get(`https://test-server-j0t3.onrender.com/products/${id}`);
-    const fetchBids = axios.get(`https://test-server-j0t3.onrender.com/bids?productId=${id}`);
+    const fetchBids = axios.get(`https://test-server-j0t3.onrender.com/getBids/${id}`);
 
     Promise.all([fetchAuction, fetchBids])
       .then(([auctionRes, bidsRes]) => {
-        // Defensive: handle error from backend
         if (auctionRes.data && auctionRes.data.success === false) {
           setError(auctionRes.data.message || 'Failed to fetch auction details.');
           setLoading(false);
           return;
         }
-        // Ensure all fields are strings for controlled inputs
+        if (!auctionRes.data || Object.keys(auctionRes.data).length === 0) {
+          setError('Auction not found.');
+          setLoading(false);
+          return;
+        }
         const product = auctionRes.data;
         setFormData({
           name: product.name || '',
           description: product.description || '',
           startingPrice: product.startingPrice !== undefined ? String(product.startingPrice) : '',
-          endTime: product.endTime ? product.endTime.slice(0, 16) : '', // for datetime-local
+          endTime: product.endTime ? product.endTime.slice(0, 16) : '',
           imageUrl: product.imageUrl || '',
           latitude: product.latitude !== undefined ? String(product.latitude) : '',
           longitude: product.longitude !== undefined ? String(product.longitude) : '',
@@ -75,8 +84,13 @@ const EditAuction = () => {
         setLoading(false);
       })
       .catch((err) => {
-        setError('Failed to fetch auction details.');
+        setError(
+          (err.response && err.response.data && err.response.data.message) ?
+            `Error: ${err.response.data.message}` :
+            `Network or server error: ${err.message}`
+        );
         setLoading(false);
+        console.error('Fetch auction error:', err, 'Auction ID:', id);
       });
   }, [id]);
 
