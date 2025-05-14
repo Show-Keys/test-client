@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
 import './EditUser.css';
 
@@ -16,14 +15,12 @@ const EditUser = () => {
     profilepic: '',
   });
   const [loading, setLoading] = useState(true);
-  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     axios
       .get(`http://localhost:3002/users/${id}`)
       .then((res) => {
         setUser(res.data);
-        setPreview(res.data.profilepic);
         setLoading(false);
       })
       .catch(() => {
@@ -36,24 +33,6 @@ const EditUser = () => {
     const { name, value } = e.target;
     setUser((prev) => ({ ...prev, [name]: value }));
   };
-
-  const onDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setUser((prev) => ({ ...prev, profilepic: reader.result }));
-        setPreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: { 'image/*': [] },
-    maxFiles: 1,
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,30 +89,22 @@ const EditUser = () => {
           </div>
 
           <div className="form-group">
-            <label>Profile Picture:</label>
-            <div
-              {...getRootProps()}
-              className="dropzone"
-              style={{
-                border: '2px dashed #007bff',
-                padding: '20px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                borderRadius: '6px',
-                backgroundColor: '#f8f9fa',
-              }}
-            >
-              <input {...getInputProps()} />
-              {preview ? (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-                />
-              ) : (
-                <p>Drag & drop a file here, or click to select one</p>
-              )}
-            </div>
+            <label htmlFor="profilepic">Profile Picture URL:</label>
+            <input
+              type="text"
+              id="profilepic"
+              name="profilepic"
+              value={user.profilepic}
+              onChange={handleChange}
+              placeholder="Paste image URL here"
+            />
+            {user.profilepic && (
+              <img
+                src={user.profilepic}
+                alt="Preview"
+                style={{ width: '100px', height: '100px', borderRadius: '50%', marginTop: '10px' }}
+              />
+            )}
           </div>
 
           <div className="form-group">
