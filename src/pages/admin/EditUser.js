@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
-// import './EditUser.css';
+import './EditUser.css';
 
 const EditUser = () => {
   const { id } = useParams();
