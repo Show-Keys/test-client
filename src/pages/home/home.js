@@ -10,6 +10,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { productList, isLoading, isError, message } = useSelector((state) => state.products);
   const user = JSON.parse(localStorage.getItem('user')); // Get user from localStorage
+  const isAdmin = user?.role === 'admin';
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -95,7 +96,7 @@ const Home = () => {
             <div
               className="auction-card"
               key={product._id}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', position: 'relative' }}
               onClick={() => handleCardClick(product._id)}
             >
               <div
@@ -109,6 +110,48 @@ const Home = () => {
                   Ends: {new Date(product.endTime).toLocaleString()}
                 </div>
               </div>
+              {isAdmin && (
+                <div style={{ position: 'absolute', top: 8, right: 8, display: 'flex', gap: 4, zIndex: 2 }} onClick={e => e.stopPropagation()}>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => navigate(`/edit-auction/${product._id}`)}
+                    style={{ marginRight: 4 }}
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={async () => {
+                      const result = await Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'This will permanently delete the auction.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'Cancel',
+                      });
+                      if (result.isConfirmed) {
+                        try {
+                          const res = await fetch(`https://test-server-j0t3.onrender.com/products/${product._id}`, {
+                            method: 'DELETE',
+                          });
+                          const data = await res.json();
+                          if (data.success) {
+                            Swal.fire('Deleted!', 'Auction has been deleted.', 'success');
+                            dispatch(getProducts());
+                          } else {
+                            Swal.fire('Error', data.message || 'Failed to delete auction.', 'error');
+                          }
+                        } catch (err) {
+                          Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
+                        }
+                      }
+                    }}
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

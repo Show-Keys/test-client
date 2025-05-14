@@ -1,15 +1,19 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDashboardStats } from '../../features/ProductSlice';
+import { getDashboardStats, getProducts } from '../../features/ProductSlice';
+import Swal from 'sweetalert2';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
-  const { dashboardStats, isLoading, isError, message } = useSelector((state) => state.products);
+  const { dashboardStats, isLoading, isError, message, productList } = useSelector((state) => state.products);
+  const user = JSON.parse(localStorage.getItem('user'));
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     dispatch(getDashboardStats());
+    dispatch(getProducts()); // Fetch all products for admin list
   }, [dispatch]);
 
   // Format number with commas
@@ -23,6 +27,33 @@ const AdminDashboard = () => {
       style: 'currency',
       currency: 'USD'
     }).format(amount);
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'This will permanently delete the auction.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    });
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`https://test-server-j0t3.onrender.com/products/${id}`, {
+          method: 'DELETE',
+        });
+        const data = await res.json();
+        if (data.success) {
+          Swal.fire('Deleted!', 'Auction has been deleted.', 'success');
+          dispatch(getProducts()); // Refresh list
+        } else {
+          Swal.fire('Error', data.message || 'Failed to delete auction.', 'error');
+        }
+      } catch (err) {
+        Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
+      }
+    }
   };
 
   return (
@@ -112,6 +143,54 @@ const AdminDashboard = () => {
               <p>{formatCurrency(dashboardStats.totalRevenue)}</p>
             )}
           </div>
+        </section>
+
+        <section className="admin-auctions-list mt-5">
+          <h2>All Auctions</h2>
+          {isLoading ? (
+            <div className="loading-spinner">
+              <i className="fas fa-spinner fa-spin"></i> Loading auctions...
+            </div>
+          ) : (
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Start Price</th>
+                  <th>End Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productList && productList.length > 0 ? productList.map(product => (
+                  <tr key={product._id}>
+                    <td>{product.name}</td>
+                    <td>${product.startingPrice}</td>
+                    <td>{new Date(product.endTime).toLocaleString()}</td>
+                    <td>
+                      {isAdmin && (
+                        <>
+                          <Link to={`/edit-auction/${product._id}`} className="btn btn-primary btn-sm me-2">
+                            <i className="fas fa-edit"></i> Edit
+                          </Link>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => handleDelete(product._id)}
+                          >
+                            <i className="fas fa-trash"></i> Delete
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                )) : (
+                  <tr>
+                    <td colSpan="4">No auctions found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          )}
         </section>
       </main>
     </div>
