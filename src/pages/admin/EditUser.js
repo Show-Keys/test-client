@@ -18,7 +18,7 @@ const EditUser = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/users/${id}`)
+      .get(`https://test-server-j0t3.onrender.com/users/${id}`)
       .then((res) => {
         setUser(res.data);
         setLoading(false);
@@ -37,7 +37,7 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:3002/users/${id}`, user);
+      await axios.put(`https://test-server-j0t3.onrender.com/users/${id}`, user);
       Swal.fire('Success!', 'User updated successfully!', 'success').then(() => {
         navigate('/ManageUsers');
       });
