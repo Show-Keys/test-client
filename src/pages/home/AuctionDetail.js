@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { getProductDetails } from '../../features/ProductSlice';
 import { getBids, placeBid, resetBidState } from '../../features/bidSlice';
 import Swal from "sweetalert2";
+import axios from 'axios';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import './AuctionDetail.css';
@@ -228,17 +229,45 @@ const AuctionDetail = () => {
               )}
             </div>
 
-            {/* Only show Edit button if user is admin */}
+            {/* Only show Edit and Delete buttons if user is admin */}
             {user && user.role === "admin" && (
-              <Button
-                color="info"
-                size="sm"
-                tag={Link}
-                to={`/editAuction/${product._id}`}
-                style={{ marginTop: '1rem' }}
-              >
-                <i className="fas fa-edit"></i> Edit
-              </Button>
+              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                <Button
+                  color="info"
+                  size="sm"
+                  tag={Link}
+                  to={`/editAuction/${product._id}`}
+                >
+                  <i className="fas fa-edit"></i> Edit
+                </Button>
+                <Button
+                  color="danger"
+                  size="sm"
+                  onClick={() => {
+                    Swal.fire({
+                      title: 'Are you sure?',
+                      text: 'This will permanently delete the auction.',
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes, delete it!',
+                      cancelButtonText: 'Cancel',
+                    }).then(async (result) => {
+                      if (result.isConfirmed) {
+                        try {
+                          await axios.delete(`https://test-server-j0t3.onrender.com/products/${product._id}`);
+                          Swal.fire('Deleted!', 'Auction has been deleted.', 'success').then(() => {
+                            navigate('/AdminDashboard');
+                          });
+                        } catch (err) {
+                          Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
+                        }
+                      }
+                    });
+                  }}
+                >
+                  <i className="fas fa-trash"></i> Delete
+                </Button>
+              </div>
             )}
           </div>
         </div>
