@@ -3,7 +3,7 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, resetUserState } from "../../features/UserSlice";
 import { useNavigate, Link } from "react-router-dom";
-import Swal from "sweetalert2"; // <-- Add this import
+import Swal from "sweetalert2";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -42,14 +42,29 @@ const Login = () => {
         }
         if (result.user.role === "admin") {
           await Swal.fire({
-            title: "Admin Activated!",
-            text: "Welcome, admin. You have full access.",
-            icon: "success",
+            title: '<span style="color:#ff5722; font-weight:bold;">🔥 Admin Activated! 🔥</span>',
+            html: '<div style="font-size:1.2em;">Welcome, <b>admin</b>. You have <span style="color:#ff9800;">full access</span>.<br><br><span style="font-size:2em;">🚀</span></div>',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #ff9800 100%)',
+            color: '#fff',
+            icon: 'success',
             showConfirmButton: false,
-            timer: 1800,
+            timer: 2000,
             timerProgressBar: true,
+            customClass: {
+              popup: 'swal2-punch-admin'
+            },
             didOpen: () => {
-              Swal.showLoading();
+              const popup = Swal.getPopup();
+              if (popup) {
+                popup.animate([
+                  { transform: 'scale(0.7) rotate(-5deg)' },
+                  { transform: 'scale(1.1) rotate(5deg)' },
+                  { transform: 'scale(1) rotate(0deg)' }
+                ], {
+                  duration: 600,
+                  easing: 'cubic-bezier(.68,-0.55,.27,1.55)'
+                });
+              }
             }
           });
           navigate("/AdminDashboard");
