@@ -30,20 +30,17 @@ const Login = () => {
     const { email, password } = formData;
 
     if (!email || !password) {
-      Swal.fire("Error", "Please fill in all fields", "error"); // <-- Use SweetAlert
+      Swal.fire("Error", "Please fill in all fields", "error");
       return;
     }
 
     try {
       const result = await dispatch(loginUser({ email, password })).unwrap();
       if (result.user) {
-        // Store user data in localStorage if remember is checked
         if (formData.remember) {
           localStorage.setItem('user', JSON.stringify(result.user));
         }
-        // Navigate based on role
         if (result.user.role === "admin") {
-          // SweetAlert for admin activation
           await Swal.fire({
             title: "Admin Activated!",
             text: "Welcome, admin. You have full access.",
@@ -61,7 +58,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      Swal.fire("Login failed", error.message || "Invalid credentials", "error"); // <-- Use SweetAlert
+      Swal.fire("Login failed", error.message || "Invalid credentials", "error");
     }
   };
 
@@ -70,10 +67,13 @@ const Login = () => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const userData = JSON.parse(storedUser);
-      if (userData.role === "admin") {
-        navigate("/AdminDashboard");
-      } else {
-        navigate("/home");
+      // Only auto-navigate if not already on the dashboard/home
+      if (window.location.pathname === "/login") {
+        if (userData.role === "admin") {
+          navigate("/AdminDashboard");
+        } else {
+          navigate("/home");
+        }
       }
     }
   }, [navigate]);
