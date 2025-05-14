@@ -14,6 +14,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/UserSlice';
 import './Navbar.css';
+import defaultAvatar from '../assets/default-avatar.png'; // Optional: fallback image
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,24 @@ const NavigationBar = () => {
         className="custom-navbar"
       >
         <Container>
+          {/* User profile image at the top left */}
+          {user && (
+            <div className="navbar-profile-img">
+              <img
+                src={user.profilepic || defaultAvatar}
+                alt="Profile"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  marginRight: 16,
+                  border: '2px solid #ffc107',
+                  background: '#fff'
+                }}
+              />
+            </div>
+          )}
           <NavbarBrand tag={Link} to="/home" className="brand-text">
             <i className="fas fa-gavel me-2"></i>
             Auction App
@@ -117,4 +136,4 @@ const NavigationBar = () => {
   );
 };
 
-export default NavigationBar; 
+export default NavigationBar;
