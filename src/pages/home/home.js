@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../features/ProductSlice';
 import './Home.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { productList, isLoading, isError, message } = useSelector((state) => state.products);
+  const user = JSON.parse(localStorage.getItem('user')); // Get user from localStorage
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -16,23 +17,25 @@ const Home = () => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  // SweetAlert welcome dialog on mount
+  // SweetAlert welcome dialog on mount (only if not logged in)
   useEffect(() => {
-    Swal.fire({
-      title: 'Welcome to the Ultimate Auction Platform!',
-      text: 'Would you like to login or continue as a guest?',
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Login',
-      cancelButtonText: 'Continue as Guest',
-      allowOutsideClick: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate('/login');
-      }
-      // If cancelled, do nothing (continue as guest)
-    });
-  }, [navigate]);
+    if (!user) {
+      Swal.fire({
+        title: 'Welcome to the Ultimate Auction Platform!',
+        text: 'Would you like to login or continue as a guest?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Continue as Guest',
+        allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login');
+        }
+        // If cancelled, do nothing (continue as guest)
+      });
+    }
+  }, [navigate, user]);
 
   const filteredProducts = productList.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -40,21 +43,25 @@ const Home = () => {
 
   // Handle card click with SweetAlert
   const handleCardClick = (productId) => {
-    Swal.fire({
-      title: "Guest Mode",
-      text: "You can view the bids, but you must login to place a bid.",
-      icon: "info",
-      showCancelButton: true,
-      confirmButtonText: "Login",
-      cancelButtonText: "Continue",
-      allowOutsideClick: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate('/login');
-      } else {
-        navigate(`/AuctionDetail/${productId}`);
-      }
-    });
+    if (!user) {
+      Swal.fire({
+        title: "Guest Mode",
+        text: "You can view the bids, but you must login to place a bid.",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Login",
+        cancelButtonText: "Continue",
+        allowOutsideClick: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/login');
+        } else {
+          navigate(`/AuctionDetail/${productId}`);
+        }
+      });
+    } else {
+      navigate(`/AuctionDetail/${productId}`);
+    }
   };
 
   return (
