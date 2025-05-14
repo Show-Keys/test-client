@@ -165,7 +165,7 @@ const AdminDashboard = () => {
                 {productList && productList.length > 0 ? productList.map(product => (
                   <tr key={product._id}>
                     <td>{product.name}</td>
-                    <td>${product.startingPrice}</td>
+                    <td>{formatCurrency(product.startingPrice)}</td>
                     <td>{new Date(product.endTime).toLocaleString()}</td>
                     <td>
                       {isAdmin ? (
