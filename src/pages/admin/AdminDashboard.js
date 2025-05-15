@@ -81,7 +81,7 @@ const AdminDashboard = () => {
             </li>
             <li>
               <Link to="/ManageBids">
-                <i className="fas fa-money-bill-wave"></i> Manage Bids
+                <i className="fas fa-money-bill-wave"></i> Manage Auctions
               </Link>
             </li>
 
