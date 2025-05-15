@@ -79,12 +79,6 @@ const AdminDashboard = () => {
                 <i className="fas fa-gavel"></i> Add Auctions
               </Link>
             </li>
-            <li>
-              <Link to="/ManageBids">
-                <i className="fas fa-money-bill-wave"></i> Manage Auctions
-              </Link>
-            </li>
-
           </ul>
         </nav>
       </aside>
