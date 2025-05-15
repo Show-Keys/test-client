@@ -9,7 +9,7 @@ import './AddProduct.css'; // Reuse AddProduct styles
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import Lottie from 'lottie-react';
-import animationData from './loadingAnimation.json'; // Import Lottie animation
+import animationData from '../../assets/loadingAnimation.json'; // Import Lottie animation
 
 // Custom marker icon fix for React-Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
