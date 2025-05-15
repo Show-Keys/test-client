@@ -5,7 +5,7 @@ import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import Lottie from "lottie-react";
-import animationData from "./my-loader.json";
+import animationData from "../../assets/loadingAnimation.json";
 
 const Home = () => {
   const dispatch = useDispatch();
