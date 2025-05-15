@@ -4,6 +4,8 @@ import { getProducts } from '../../features/ProductSlice';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
+import Lottie from "lottie-react";
+import animationData from "./my-loader.json";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -88,8 +90,20 @@ const Home = () => {
       <main className="container">
         <h2>Featured Auctions</h2>
 
-        {isLoading && <p>Loading products...</p>}
-        {isError && <p>Error: {message}</p>}
+        {isLoading && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
+            <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
+            </div>
+            <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
+              Loading Auctions...
+            </div>
+            <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
+              Please wait while we connect you to the best deals online!
+            </div>
+          </div>
+        )}
+        {!isLoading && isError && <p>Error: {message}</p>}
 
         <div className="auctions-grid">
           {filteredProducts.map((product) => (

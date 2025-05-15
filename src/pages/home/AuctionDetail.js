@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import animationData from '../../assets/loadingAnimation.json';
 import './AuctionDetail.css';
 
 const AuctionDetail = () => {
@@ -15,7 +17,7 @@ const AuctionDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { product } = useSelector((state) => state.products);
+  const { product, isLoading: productLoading } = useSelector((state) => state.products);
   const { bidList, isLoading: bidLoading, isError: bidError, message: bidMessage, isSuccess: bidSuccess } = useSelector((state) => state.bids);
   const { user } = useSelector((state) => state.users);
 
@@ -108,6 +110,22 @@ const AuctionDetail = () => {
   const getGoogleMapsUrl = (lat, lng) => {
     return `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
   };
+
+  if (productLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
+        <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
+        </div>
+        <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
+          Loading Auctions...
+        </div>
+        <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
+          Please wait while we connect you to the best deals online!
+        </div>
+      </div>
+    );
+  }
 
   if (!product) return <div className="container">Loading...</div>;
 
@@ -244,7 +262,16 @@ const AuctionDetail = () => {
                     disabled={bidLoading || !user}
                     className="bid-button"
                   >
-                    {bidLoading ? 'Placing Bid...' : 'Place Bid'}
+                    {bidLoading ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
+                        <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
+                        </div>
+                        <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
+                          Placing Bid...
+                        </div>
+                      </div>
+                    ) : 'Place Bid'}
                   </button>
                 </div>
                 {!user && (
