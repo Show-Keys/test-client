@@ -18,7 +18,11 @@ const EditUser = () => {
 
   useEffect(() => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     axios.get(`${process.env.REACT_APP_API_URL}/users/${id}`)
+=======
+    axios.get(`https://test-server-j0t3.onrender.com/users/${id}`)
+>>>>>>> parent of 913702d (oo)
       .then(res => {
 =======
     axios
@@ -43,7 +47,11 @@ const EditUser = () => {
     e.preventDefault();
     try {
 <<<<<<< HEAD
+<<<<<<< HEAD
       await axios.put(`${process.env.REACT_APP_API_URL}/users/${id}`, user);
+=======
+      await axios.put(`https://test-server-j0t3.onrender.com/users/${id}`, user);
+>>>>>>> parent of 913702d (oo)
       alert('User updated successfully');
       navigate('/ManageUsers');
 =======
