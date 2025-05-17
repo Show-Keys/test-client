@@ -14,7 +14,7 @@ const ManageUsers = () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.get('https://test-server-j0t3.onrender.com/users');
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/users`);
       setUsers(res.data);
     } catch (err) {
       Swal.fire("Error", "Failed to fetch users. Please try again later.", "error");
@@ -35,7 +35,7 @@ const ManageUsers = () => {
     });
     if (result.isConfirmed) {
       try {
-        await axios.delete(`https://test-server-j0t3.onrender.com/users/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/users/${id}`);
         setUsers(prev => prev.filter(user => user._id !== id));
         Swal.fire("Deleted!", "User has been deleted.", "success");
       } catch (err) {

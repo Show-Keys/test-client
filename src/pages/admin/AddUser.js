@@ -34,11 +34,7 @@ const AddUser = () => {
       };
 
 <<<<<<< HEAD
-<<<<<<< HEAD
       await axios.post(`${process.env.REACT_APP_API_URL}/registerUser`, userData);
-=======
-      await axios.post('https://test-server-j0t3.onrender.com/registerUser', userData);
->>>>>>> parent of 913702d (oo)
       alert('User created successfully!');
 =======
       await axios.post('https://test-server-j0t3.onrender.com/registerUser', userData);
