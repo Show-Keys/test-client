@@ -32,7 +32,7 @@ const AddUser = () => {
         role: 'User'
       };
 
-      await axios.post('https://test-server-j0t3.onrender.com/registerUser', userData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/registerUser`, userData);
       alert('User created successfully!');
       navigate('/ManageUsers');
     } catch (err) {

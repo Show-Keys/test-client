@@ -12,7 +12,7 @@ export const addProduct = createAsyncThunk(
       };
 
       const response = await axios.post(
-        'https://test-server-j0t3.onrender.com/addProduct',
+        `${process.env.REACT_APP_API_URL}/addProduct`,
         dataToSend
       );
       
@@ -37,7 +37,7 @@ export const getProducts = createAsyncThunk(
   'products/getProducts',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://test-server-j0t3.onrender.com/getProducts');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/getProducts`);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message);
@@ -49,7 +49,7 @@ export const getProductDetails = createAsyncThunk(
   'products/getProductDetails',
   async (productId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`https://test-server-j0t3.onrender.com/getProductDetails/${productId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/getProductDetails/${productId}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -61,7 +61,7 @@ export const getDashboardStats = createAsyncThunk(
   'products/getDashboardStats',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://test-server-j0t3.onrender.com/dashboard/stats');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/dashboard/stats`);
       if (response.data.success) {
         return response.data.stats;
       } else {
