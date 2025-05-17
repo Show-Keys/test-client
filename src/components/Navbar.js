@@ -14,7 +14,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/UserSlice';
 import './Navbar.css';
-import defaultAvatar from '../assets/default-avatar.png'; // Optional: fallback image
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +21,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
-  const isAdmin = user?.role === 'Admin';
+  const isAdmin = user?.role === 'admin';
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -99,29 +98,13 @@ const NavigationBar = () => {
                       </Button>
                     </NavItem>
                   )}
-                  <NavItem className="d-flex align-items-center">
+                  <NavItem>
                     <NavLink 
                       onClick={handleLogout}
                       className="nav-link-custom logout-btn"
-                      style={{ display: 'flex', alignItems: 'center' }}
                     >
                       <i className="fas fa-sign-out-alt me-1"></i>
                       Logout
-                      {user && (
-                        <img
-                          src={user.profilepic || defaultAvatar}
-                          alt="Profile"
-                          style={{
-                            width: 32,
-                            height: 32,
-                            borderRadius: '50%',
-                            objectFit: 'cover',
-                            marginLeft: 12,
-                            border: '2px solid #ffc107',
-                            background: '#fff'
-                          }}
-                        />
-                      )}
                     </NavLink>
                   </NavItem>
                 </>
@@ -134,4 +117,4 @@ const NavigationBar = () => {
   );
 };
 
-export default NavigationBar;
+export default NavigationBar; 

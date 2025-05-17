@@ -1,21 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDashboardStats, getProducts } from '../../features/ProductSlice';
-import Swal from 'sweetalert2';
-import Lottie from 'lottie-react';
-import animationData from '../../assets/loadingAnimation.json';
+import { getDashboardStats } from '../../features/ProductSlice';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
-  const { dashboardStats, isLoading, isError, message, productList } = useSelector((state) => state.products);
-  const user = JSON.parse(localStorage.getItem('user'));
-  const isAdmin = user?.role === 'Admin';
+  const { dashboardStats, isLoading, isError, message } = useSelector((state) => state.products);
 
   useEffect(() => {
     dispatch(getDashboardStats());
-    dispatch(getProducts()); // Fetch all products for admin list
   }, [dispatch]);
 
   // Format number with commas
@@ -25,37 +19,10 @@ const AdminDashboard = () => {
 
   // Format currency
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-OM', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'OMR'
+      currency: 'USD'
     }).format(amount);
-  };
-
-  const handleDelete = async (id) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'This will permanently delete the auction.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-    });
-    if (result.isConfirmed) {
-      try {
-        const res = await fetch(`https://test-server-j0t3.onrender.com/products/${id}`, {
-          method: 'DELETE',
-        });
-        const data = await res.json();
-        if (data.success) {
-          Swal.fire('Deleted!', 'Auction has been deleted.', 'success');
-          dispatch(getProducts()); // Refresh list
-        } else {
-          Swal.fire('Error', data.message || 'Failed to delete auction.', 'error');
-        }
-      } catch (err) {
-        Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
-      }
-    }
   };
 
   return (
@@ -81,6 +48,12 @@ const AdminDashboard = () => {
                 <i className="fas fa-gavel"></i> Add Auctions
               </Link>
             </li>
+            <li>
+              <Link to="/ManageBids">
+                <i className="fas fa-money-bill-wave"></i> Manage Bids
+              </Link>
+            </li>
+
           </ul>
         </nav>
       </aside>
@@ -102,16 +75,8 @@ const AdminDashboard = () => {
           <div className="stat-card">
             <h3>Total Users</h3>
             {isLoading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-                <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-                </div>
-                <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                  Loading Auctions...
-                </div>
-                <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-                  Please wait while we connect you to the best deals online!
-                </div>
+              <div className="loading-spinner">
+                <i className="fas fa-spinner fa-spin"></i>
               </div>
             ) : (
               <p>{formatNumber(dashboardStats.totalUsers)}</p>
@@ -120,16 +85,8 @@ const AdminDashboard = () => {
           <div className="stat-card">
             <h3>Active Auctions</h3>
             {isLoading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-                <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-                </div>
-                <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                  Loading Auctions...
-                </div>
-                <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-                  Please wait while we connect you to the best deals online!
-                </div>
+              <div className="loading-spinner">
+                <i className="fas fa-spinner fa-spin"></i>
               </div>
             ) : (
               <p>{formatNumber(dashboardStats.activeAuctions)}</p>
@@ -138,16 +95,8 @@ const AdminDashboard = () => {
           <div className="stat-card">
             <h3>Total Bids</h3>
             {isLoading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-                <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-                </div>
-                <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                  Loading Auctions...
-                </div>
-                <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-                  Please wait while we connect you to the best deals online!
-                </div>
+              <div className="loading-spinner">
+                <i className="fas fa-spinner fa-spin"></i>
               </div>
             ) : (
               <p>{formatNumber(dashboardStats.totalBids)}</p>
@@ -156,77 +105,13 @@ const AdminDashboard = () => {
           <div className="stat-card">
             <h3>Total Revenue</h3>
             {isLoading ? (
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-                <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-                </div>
-                <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                  Loading Auctions...
-                </div>
-                <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-                  Please wait while we connect you to the best deals online!
-                </div>
+              <div className="loading-spinner">
+                <i className="fas fa-spinner fa-spin"></i>
               </div>
             ) : (
               <p>{formatCurrency(dashboardStats.totalRevenue)}</p>
             )}
           </div>
-        </section>
-
-        <section className="admin-auctions-list mt-5">
-          <h2>All Auctions</h2>
-          {isLoading ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-              <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-              </div>
-              <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                Loading Auctions...
-              </div>
-              <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-                Please wait while we connect you to the best deals online!
-              </div>
-            </div>
-          ) : (
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Start Price</th>
-                  <th>End Time</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productList && productList.length > 0 ? productList.map(product => (
-                  <tr key={product._id}>
-                    <td>{product.name}</td>
-                    <td>{formatCurrency(product.startingPrice)}</td>
-                    <td>{new Date(product.endTime).toLocaleString()}</td>
-                    <td>
-                      {isAdmin ? (
-                        <>
-                          <Link to={`/editAuction/${product._id}`} className="btn btn-primary btn-sm me-2">
-                            <i className="fas fa-edit"></i> Edit
-                          </Link>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleDelete(product._id)}
-                          >
-                            <i className="fas fa-trash"></i> Delete
-                          </button>
-                        </>
-                      ) : null}
-                    </td>
-                  </tr>
-                )) : (
-                  <tr>
-                    <td colSpan="4">No auctions found.</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          )}
         </section>
       </main>
     </div>

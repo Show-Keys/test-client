@@ -9,7 +9,6 @@ import AddProduct from './pages/admin/AddProduct';
 import AuctionDetail from './pages/home/AuctionDetail';
 import EditUser from './pages/admin/EditUser';
 import AddUser from './pages/admin/AddUser';
-import EditAuction from './pages/admin/EditAuction';
 import NavigationBar from './components/Navbar';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
@@ -23,7 +22,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requireAdmin && user.role !== 'Admin') {
+  if (requireAdmin && user.role !== 'admin') {
     return <Navigate to="/home" replace />;
   }
 
@@ -81,14 +80,6 @@ function App() {
             element={
               <ProtectedRoute requireAdmin={true}>
                 <AddUser />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/editAuction/:id" 
-            element={
-              <ProtectedRoute requireAdmin={true}>
-                <EditAuction />
               </ProtectedRoute>
             } 
           />

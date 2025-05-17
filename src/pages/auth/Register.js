@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../features/UserSlice';
-import Swal from "sweetalert2"; // <-- Add this import
 
 import { registerValidationSchema } from '../../validations/RegValidation';
 import {
@@ -30,9 +29,8 @@ const Register = () => {
   // Effect hook to handle side effects after the registration attempt
   useEffect(() => {
     if (isSuccess && message) {
-      Swal.fire("Success", message, "success").then(() => {
-        navigate("/login");
-      });
+      alert(message);
+      navigate("/login");
     }
   }, [isSuccess, message, navigate]);
 

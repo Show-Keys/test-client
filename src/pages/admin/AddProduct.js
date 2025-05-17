@@ -15,7 +15,6 @@ import {
   Alert
 } from 'reactstrap';
 import { addProduct, reset } from '../../features/ProductSlice';
-import Swal from "sweetalert2";
 import './AddProduct.css';
 
 const AddProduct = () => {
@@ -57,11 +56,11 @@ const AddProduct = () => {
         },
         (error) => {
           console.error("Error getting location:", error);
-          Swal.fire("Location Error", "Unable to get your location. Please enter coordinates manually.", "error");
+          setError("Unable to get your location. Please enter coordinates manually.");
         }
       );
     } else {
-      Swal.fire("Not Supported", "Geolocation is not supported by your browser. Please enter coordinates manually.", "warning");
+      setError("Geolocation is not supported by your browser. Please enter coordinates manually.");
     }
   }, []);
 
@@ -89,16 +88,17 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     // Validate form data
     if (!formData.name || !formData.description || !formData.startingPrice || !formData.imageUrl || !formData.endTime) {
-      Swal.fire("Error", "Please fill in all required fields", "error");
+      setError('Please fill in all required fields');
       return;
     }
 
     // Validate location
     if (!formData.latitude || !formData.longitude) {
-      Swal.fire("Error", "Please provide location coordinates", "error");
+      setError('Please provide location coordinates');
       return;
     }
 
@@ -203,7 +203,7 @@ const AddProduct = () => {
                     <Row>
                       <Col md={6}>
                         <FormGroup className="mb-4">
-                          <Label for="startingPrice">Starting Price (﷼)</Label>
+                          <Label for="startingPrice">Starting Price ($)</Label>
                           <Input
                             type="number"
                             name="startingPrice"
@@ -330,4 +330,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddProduct; 

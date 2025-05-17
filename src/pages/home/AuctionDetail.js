@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { getProductDetails } from '../../features/ProductSlice';
 import { getBids, placeBid, resetBidState } from '../../features/bidSlice';
-import Swal from "sweetalert2";
-import axios from 'axios';
-import { Button } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import Lottie from 'lottie-react';
-import animationData from '../../assets/loadingAnimation.json';
 import './AuctionDetail.css';
 
 const AuctionDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const { product, isLoading: productLoading } = useSelector((state) => state.products);
+  const { product } = useSelector((state) => state.products);
   const { bidList, isLoading: bidLoading, isError: bidError, message: bidMessage, isSuccess: bidSuccess } = useSelector((state) => state.bids);
   const { user } = useSelector((state) => state.users);
 
@@ -84,13 +76,13 @@ const AuctionDetail = () => {
 
   const handleBid = () => {
     if (isAuctionEnded) {
-      return Swal.fire("Auction Ended", "This auction has ended. Bidding is no longer allowed.", "info");
+      return alert('This auction has ended. Bidding is no longer allowed.');
     }
 
     const amount = parseFloat(bidAmount);
-    if (!user) return Swal.fire("Login Required", "Please login to place a bid.", "warning");
+    if (!user) return alert('Please login to place a bid.');
     if (!amount || amount < minBidAmount) {
-      return Swal.fire("Invalid Bid", `Your bid must be at least ﷼${minBidAmount}`, "error");
+      return alert(`Your bid must be at least $${minBidAmount}`);
     }
 
     dispatch(placeBid({
@@ -111,22 +103,6 @@ const AuctionDetail = () => {
     return `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
   };
 
-  if (productLoading) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-        <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-        </div>
-        <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-          Loading Auctions...
-        </div>
-        <div style={{ color: '#888', fontSize: 15, marginTop: 6 }}>
-          Please wait while we connect you to the best deals online!
-        </div>
-      </div>
-    );
-  }
-
   if (!product) return <div className="container">Loading...</div>;
 
   // Sort bids from highest to lowest
@@ -138,49 +114,6 @@ const AuctionDetail = () => {
         <button onClick={() => window.history.back()} style={{ marginBottom: '1.5rem' }}>← Back</button>
 
         <div className="auction-detail">
-          {/* Admin Edit/Delete Buttons at the top */}
-          {user && user.role === "Admin" && (
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', justifyContent: 'flex-end' }}>
-              <Button
-                color="primary"
-                size="md"
-                tag={Link}
-                to={`/editAuction/${product._id}`}
-                style={{ minWidth: 110, fontWeight: 600 }}
-              >
-                <i className="fas fa-edit me-2"></i> Edit Auction
-              </Button>
-              <Button
-                color="danger"
-                size="md"
-                style={{ minWidth: 110, fontWeight: 600 }}
-                onClick={() => {
-                  Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'This will permanently delete the auction.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    cancelButtonText: 'Cancel',
-                  }).then(async (result) => {
-                    if (result.isConfirmed) {
-                      try {
-                        await axios.delete(`https://test-server-j0t3.onrender.com/products/${product._id}`);
-                        Swal.fire('Deleted!', 'Auction has been deleted.', 'success').then(() => {
-                          navigate('/AdminDashboard');
-                        });
-                      } catch (err) {
-                        Swal.fire('Error', 'Failed to delete auction. Please try again.', 'error');
-                      }
-                    }
-                  });
-                }}
-              >
-                <i className="fas fa-trash me-2"></i> Delete Auction
-              </Button>
-            </div>
-          )}
-
           <div>
             <div 
               className="main-image" 
@@ -220,12 +153,12 @@ const AuctionDetail = () => {
               <div className="current-price">
                 <span>Current Highest Bid:</span>
                 <span className="price">
-                  {sortedBids.length > 0 ? sortedBids[0].bidAmount : product.startingPrice} ﷼
+                  ${sortedBids.length > 0 ? sortedBids[0].bidAmount : product.startingPrice}
                 </span>
               </div>
               <div className="starting-price">
                 <span>Starting Price:</span>
-                <span className="price">{product.startingPrice} ﷼</span>
+                <span className="price">${product.startingPrice}</span>
               </div>
             </div>
 
@@ -253,7 +186,7 @@ const AuctionDetail = () => {
                     type="number"
                     value={bidAmount}
                     onChange={(e) => setBidAmount(e.target.value)}
-                    placeholder={`Minimum bid: ﷼${minBidAmount}`}
+                    placeholder={`Minimum bid: $${minBidAmount}`}
                     min={minBidAmount}
                     step="0.01"
                   />
@@ -262,16 +195,7 @@ const AuctionDetail = () => {
                     disabled={bidLoading || !user}
                     className="bid-button"
                   >
-                    {bidLoading ? (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '3rem 0' }}>
-                        <div style={{ width: 120, height: 120, background: 'rgba(255,255,255,0.8)', borderRadius: '50%', boxShadow: '0 2px 16px #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <Lottie animationData={animationData} loop={true} style={{ width: 100, height: 100 }} />
-                        </div>
-                        <div style={{ marginTop: 18, color: '#7c4dff', fontWeight: 600, fontSize: 20, letterSpacing: 1 }}>
-                          Placing Bid...
-                        </div>
-                      </div>
-                    ) : 'Place Bid'}
+                    {bidLoading ? 'Placing Bid...' : 'Place Bid'}
                   </button>
                 </div>
                 {!user && (
@@ -287,7 +211,7 @@ const AuctionDetail = () => {
                   {sortedBids.map((bid, index) => (
                     <div key={index} className="bid-item">
                       <span className="bidder">{bid.bidderName}</span>
-                      <span className="bid-amount">{bid.bidAmount} ﷼</span>
+                      <span className="bid-amount">${bid.bidAmount}</span>
                       <span className="bid-time">
                         {new Date(bid.bidTime).toLocaleString()}
                       </span>
