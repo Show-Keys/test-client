@@ -3,6 +3,7 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, resetUserState } from "../../features/UserSlice";
 import { useNavigate, Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -29,26 +30,50 @@ const Login = () => {
     const { email, password } = formData;
 
     if (!email || !password) {
-      alert("Please fill in all fields");
+      Swal.fire("Error", "Please fill in all fields", "error");
       return;
     }
 
     try {
       const result = await dispatch(loginUser({ email, password })).unwrap();
       if (result.user) {
-        // Store user data in localStorage if remember is checked
         if (formData.remember) {
           localStorage.setItem('user', JSON.stringify(result.user));
         }
-        // Navigate based on role
-        if (result.user.role === "admin") {
+        if (result.user.role === "Admin") {
+          await Swal.fire({
+            title: '<span style="color:#ff5722; font-weight:bold;">🔥 Admin Activated! 🔥</span>',
+            html: '<div style="font-size:1.2em;">Welcome, <b>admin</b>. You have <span style="color:#ff9800;">full access</span>.<br><br><span style="font-size:2em;">🚀</span></div>',
+            background: 'linear-gradient(135deg, #1a1a1a 0%, #ff9800 100%)',
+            color: '#fff',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            customClass: {
+              popup: 'swal2-punch-admin'
+            },
+            didOpen: () => {
+              const popup = Swal.getPopup();
+              if (popup) {
+                popup.animate([
+                  { transform: 'scale(0.7) rotate(-5deg)' },
+                  { transform: 'scale(1.1) rotate(5deg)' },
+                  { transform: 'scale(1) rotate(0deg)' }
+                ], {
+                  duration: 600,
+                  easing: 'cubic-bezier(.68,-0.55,.27,1.55)'
+                });
+              }
+            }
+          });
           navigate("/AdminDashboard");
         } else {
           navigate("/home");
         }
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      Swal.fire("Login failed", error.message || "Invalid credentials", "error");
     }
   };
 
@@ -57,17 +82,19 @@ const Login = () => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const userData = JSON.parse(storedUser);
-      if (userData.role === "admin") {
-        navigate("/AdminDashboard");
-      } else {
-        navigate("/home");
+      // Only auto-navigate if not already on the dashboard/home
+      if (window.location.pathname === "/login") {
+        if (userData.role === "Admin") {
+          navigate("/AdminDashboard");
+        } else {
+          navigate("/home");
+        }
       }
     }
   }, [navigate]);
 
   return (
     <div>
-
       {/* Login Form */}
       <main className="container">
         <div className="auth-container">

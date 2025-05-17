@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from 'axios';
+import Swal from "sweetalert2"; // <-- Add this import
 import {
   Container, Row, Col,
   FormGroup, Label, Button,
@@ -32,11 +33,16 @@ const AddUser = () => {
         role: 'User'
       };
 
+<<<<<<< HEAD
       await axios.post(`${process.env.REACT_APP_API_URL}/registerUser`, userData);
       alert('User created successfully!');
+=======
+      await axios.post('https://test-server-j0t3.onrender.com/registerUser', userData);
+      await Swal.fire("Success", "User created successfully!", "success"); // <-- SweetAlert
+>>>>>>> ee3e1380a08442bd318ec24838fa91d3ff7a6eec
       navigate('/ManageUsers');
     } catch (err) {
-      alert('Error creating user: ' + (err.response?.data || err.message));
+      Swal.fire("Error", 'Error creating user: ' + (err.response?.data || err.message), "error"); // <-- SweetAlert
     }
   };
 

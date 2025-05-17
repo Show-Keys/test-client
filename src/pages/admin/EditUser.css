@@ -1,0 +1,83 @@
+.edit-user-form {
+  max-width: 400px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+}
+
+.edit-user-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.edit-user-form label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.edit-user-form input[type="text"],
+.edit-user-form input[type="email"],
+.edit-user-form select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background: #f8f9fa;
+  transition: border 0.2s;
+}
+
+.edit-user-form input[type="text"]:focus,
+.edit-user-form input[type="email"]:focus,
+.edit-user-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.edit-user-form .form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.edit-user-form .btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-user-form .btn-primary {
+  background: #007bff;
+  color: #fff;
+}
+
+.edit-user-form .btn-primary:hover {
+  background: #0056b3;
+}
+
+.edit-user-form .btn-secondary {
+  background: #6c757d;
+  color: #fff;
+}
+
+.edit-user-form .btn-secondary:hover {
+  background: #495057;
+}
+
+.edit-user-form img {
+  display: block;
+  margin: 1rem auto 0 auto;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  background: #e9ecef;
+}
