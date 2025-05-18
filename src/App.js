@@ -9,7 +9,6 @@ import AddProduct from './pages/admin/AddProduct';
 import AuctionDetail from './pages/home/AuctionDetail';
 import EditUser from './pages/admin/EditUser';
 import AddUser from './pages/admin/AddUser';
-
 import NavigationBar from './components/Navbar';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
