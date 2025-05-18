@@ -62,11 +62,11 @@ const ManageUsers = () => {
                 <i className="fas fa-gavel"></i> Add Auctions
               </a>
             </li>
-            {/* <li>
+            <li>
               <a href="/ManageBids">
                 <i className="fas fa-money-bill-wave"></i> Manage Bids
               </a>
-            </li> */}
+            </li>
 
           </ul>
         </nav>
